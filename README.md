@@ -29,7 +29,7 @@ Sistema interactivo de chatbot para gestión de turnos médicos en un centro de 
 | **[Graficos BPMN 2.0](./BPMN2.0)** | Diagramas:  BPMN 2.0 (AS-IS) del proceso de recepción (manual) y BPMN 2.0 (TO-BE) del proceso de recepción con ChatBot. |
 | **[Diagrama  BPMN 2.0 (AS-IS)](.BPMN2.0/TurneroAtencion-BPMN(AS-IS).png)** | Describe el proceso de recepción (manual). |
 | **[Diagrama  BPMN 2.0 (TO-BE)](.BPMN2.0/TurneroAtencion-BPMN(TO-BE)(2.0).png)** | Describe el proceso de recepción con el ChatBot de turnos. |
-| **[Máquina de Estado Finito (FSM)(./BPMN2.0/TurneroAtencion-FSM.png)** | Describe la Máquina de Estado Finito (FSM) desarrollada para este chatbot. |
+| **[Máquina de Estado Finito (FSM)](./BPMN2.0/TurneroAtencion-FSM.png)** | Describe la Máquina de Estado Finito (FSM) desarrollada para este chatbot. |
 
 
 ---
