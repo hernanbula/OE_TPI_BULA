@@ -282,7 +282,7 @@ def mostrar_turno(turno):
     table.add_column("Valor", style="white")
     table.add_row("DNI", turno.get('dni', 'N/A'))
     table.add_row("Nombre", f"{turno.get('nombre', 'Desconocido')} {turno.get('apellido', '')}")
-    table.add_row("Especialidad", turno.get('especialidad', 'N/A'))
+    table.add_row("Especialidad", turno.get('codigo_especialidad', 'N/A'))
     table.add_row("Fecha", turno.get('fecha', 'N/A'))
     table.add_row("Hora", turno.get('hora', 'N/A'))
     console.print()
@@ -353,7 +353,7 @@ def reiniciar_datos():
 programa_activo = True
 
 while programa_activo:
-    if estado_actual == FSM_estado.INICIO:
+    if estado_actual == FSM_estado.INICIO: # FSM -> INICIO
         console.print(Panel(
         "🏥 CENTRO MÉDICO INTEGRAL 🏥\nSistema de Atención con Turnos",
         style="bold blue", expand=False))
@@ -365,18 +365,18 @@ while programa_activo:
             style="red", expand=False))
             programa_activo = False
             break
-        estado_actual = FSM_estado.ESPERANDO_DNI
+        estado_actual = FSM_estado.ESPERANDO_DNI  # FSM -> ESPERANDO_DNI
     
     elif estado_actual == FSM_estado.ESPERANDO_DNI:
         datos_solicitud["dni"] = validar_dni()
-        estado_actual = FSM_estado.PREGUNTANDO_TURNO
+        estado_actual = FSM_estado.PREGUNTANDO_TURNO # FSM -> PREGUNTANDO_TURNO
 
     elif estado_actual == FSM_estado.PREGUNTANDO_TURNO:
         datos_solicitud["tiene_turno"] = leer_opcion_si_no_cancelar("❓ ¿Tiene un turno previamente asignado?")
         if datos_solicitud["tiene_turno"] == 0:
-            estado_actual = FSM_estado.CANCELANDO
+            estado_actual = FSM_estado.CANCELANDO  # FSM -> CANCELANDO
         else:
-            estado_actual = FSM_estado.VERIFICANDO_TURNO
+            estado_actual = FSM_estado.VERIFICANDO_TURNO # FSM -> VERIFICANDO_TURNO
 
     elif estado_actual == FSM_estado.VERIFICANDO_TURNO:
         if datos_solicitud["tiene_turno"] == 1:
@@ -385,21 +385,21 @@ while programa_activo:
             datos_solicitud["turno"] = turno
             if mostrar_turno(turno):
                 datos_solicitud["tiene_turno"] = True
-                datos_solicitud["especialidad"] = turno.get('especialidad')
-                estado_actual = FSM_estado.PREGUNTANDO_COBERTURA
+                datos_solicitud["especialidad"] = turno.get('codigo_especialidad')
+                estado_actual = FSM_estado.PREGUNTANDO_COBERTURA # FSM -> PREGUNTANDO_COBERTURA
             else:
                 console.print("[dim]No se encontró el turno asociado a su DNI.[/dim]\n")
                 console.print("[dim]Le asignaremos un número de atención sin turno.[/dim]\n")
                 datos_solicitud["tiene_turno"] = False
-                estado_actual = FSM_estado.ESPERANDO_ESPECIALIDAD    
+                estado_actual = FSM_estado.ESPERANDO_ESPECIALIDAD # FSM -> ESPERANDO_ESPECIALIDAD   
         else:
             console.print("[dim]Le asignaremos un número de atención sin turno.[/dim]\n")
             datos_solicitud["tiene_turno"] = False
-            estado_actual = FSM_estado.ESPERANDO_ESPECIALIDAD
+            estado_actual = FSM_estado.ESPERANDO_ESPECIALIDAD # FSM -> ESPERANDO_ESPECIALIDAD
 
     elif estado_actual == FSM_estado.ESPERANDO_ESPECIALIDAD:
         if datos_solicitud["tiene_turno"]:
-            datos_solicitud["especialidad"] = datos_solicitud["turno"].get('especialidad')
+            datos_solicitud["especialidad"] = datos_solicitud["turno"].get('codigo_especialidad')
             console.print(f"Trabajando con su especialidad registrada: {datos_solicitud['especialidad']}\n")
             estado_actual = FSM_estado.PREGUNTANDO_COBERTURA
         else:
@@ -418,7 +418,7 @@ while programa_activo:
 
     elif estado_actual == FSM_estado.GENERANDO_TICKET:
         datos_solicitud["fecha"] = date.today().isoformat()
-        datos_solicitud["hora"] = datetime.now().isoformat()
+        datos_solicitud["hora"] = datetime.now().strftime("%H:%M:%S")
         datos_solicitud["ticket_id"] = generar_ticket_id(datos_solicitud["especialidad"])
         estado_actual = FSM_estado.GUARDANDO_TICKET_LISTA
 
